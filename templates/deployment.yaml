@@ -26,10 +26,17 @@ spec:
           command: 
             - flower
           args:
+            {{- if .Values.addr }}   
+            - --address={{ .Values.addr }}
+            {{- end }}
             - --port={{ .Values.applicationPort }}
-            - --broker={{ .Values.celery.broker}}
+            - --broker={{ required "required" .Values.celery.broker}}
+            {{- if .Values.celery.broker_api }}   
             - --broker_api={{ .Values.celery.broker_api }}
+            {{- end }}
+            {{- if .Values.celery.result_backend }}   
             - --result_backend={{ .Values.celery.result_backend }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ template "celery-flower.fullname" . }}
@@ -39,10 +46,7 @@ spec:
             - name: http
               containerPort: {{ .Values.applicationPort }}
               protocol: TCP
-          livenessProbe:
-            initialDelaySeconds: 60
-            timeoutSeconds: 20
-            failureThreshold: 6   
+          livenessProbe: 
             httpGet:
               path: /
               port: http

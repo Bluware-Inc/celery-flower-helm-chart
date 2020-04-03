@@ -13,7 +13,7 @@ appName: ""
 
 service:
   type: ClusterIP
-  port: 80
+  port: 5555
 
 # This gets put into the config map... and referenced for ingress so it's separate from the environment variable set itself...
 applicationPort: 5555
