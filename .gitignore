@@ -1,0 +1,3 @@
+test-values.yaml
+**/*.tgz
+!charts/*.tgz

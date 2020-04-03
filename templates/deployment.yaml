@@ -1,0 +1,62 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "celery-flower.fullname" . }}
+  labels:
+    app: {{ template "celery-flower.name" . }}
+    chart: {{ template "celery-flower.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "celery-flower.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "celery-flower.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: 
+            - flower
+          args:
+            - --port={{ .Values.applicationPort }}
+            - --broker={{ .Values.celery.broker}}
+            - --broker_api={{ .Values.celery.broker_api }}
+            - --result_backend={{ .Values.celery.result_backend }}
+          envFrom:
+            - configMapRef:
+                name: {{ template "celery-flower.fullname" . }}
+            - secretRef: 
+                name: {{ template "celery-flower.fullname" . }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.applicationPort }}
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 60
+            timeoutSeconds: 20
+            failureThreshold: 6   
+            httpGet:
+              path: /
+              port: http
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
