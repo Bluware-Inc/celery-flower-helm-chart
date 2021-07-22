@@ -5,7 +5,7 @@
 
 ## Add the Helm Repo
 
-IntrospectData hosts a public helm chart repository at [cloudsmith.io](https://cloudsmith.io). To add our repository, use the followiung command:
+IntrospectData hosts a public helm chart repository at [cloudsmith.io](https://cloudsmith.io). To add our repository, use the following command:
 
 ```bash
 helm repo add id-public https://dl.cloudsmith.io/public/introspect-data/helm-public/helm/charts/
