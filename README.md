@@ -2,21 +2,19 @@
 
 [Flower](https://flower.readthedocs.io/en/latest/) is monitoring tool for use in watching stats and progress within a Python [Celery](http://www.celeryproject.org/) setup.
 
-
-## Add the Helm Repo
-
-IntrospectData hosts a public helm chart repository at [cloudsmith.io](https://cloudsmith.io). To add our repository, use the followiung command:
-
-```bash
-helm repo add id-public https://dl.cloudsmith.io/public/introspect-data/helm-public/helm/charts/
-```
-
 ## Install Chart
+
+
+To clone the repository:
+
+```
+git clone https://github.com/kdeyev/celery-flower-helm-chart.git
+```
 
 To install the Flower Chart into your Kubernetes cluster :
 
 ```bash
-helm install --namespace "app_namespace" --name "flower" id-public/celery-flower
+helm install --namespace "app_namespace" --name "flower" PATH_TO_YOUR_FLOWER_HELM_REPO
 ```
 
 After installation succeeds, you can get a status of Chart
